@@ -4,9 +4,9 @@ from .models import Recipe, Category
 
 def main(request):
     recipes = Recipe.objects.order_by('?')[:10]
-    return render(request, 'recipe/main.html', {'recipes': recipes})
+    return render(request, 'main.html', {'recipes': recipes})
 
 
 def category_detail(request, id):
     category = get_object_or_404(Category, id=id)
-    return render(request, 'recipe/category_detail.html', {'category': category})
+    return render(request, 'category_detail.html', {'category': category})
