@@ -28,3 +28,22 @@ class RecipeViewsTestCase(TestCase):
         
         for r in context_recipes:
             self.assertContains(response, r.title)
+
+    def test_category_detail_view(self):
+        url = reverse('recipe:category_detail', kwargs={'id': self.category.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'category_detail.html')
+        
+        # Verify category object is in context and matches
+        self.assertEqual(response.context['category'], self.category)
+        
+        # Verify recipes of this category are displayed
+        for r in self.recipes:
+            self.assertContains(response, r.title)
+            
+        # Verify 404 is returned for non-existent category
+        invalid_url = reverse('recipe:category_detail', kwargs={'id': 9999})
+        invalid_response = self.client.get(invalid_url)
+        self.assertEqual(invalid_response.status_code, 404)
+
